@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://entityextractorbatch.dev/</loc>
+         <lastmod>2025-06-23</lastmod>
+    </url>
+    <url>
+         <loc>https://entityextractorbatch.dev/api/endpoints/</loc>
+         <lastmod>2025-06-23</lastmod>
+    </url>
+    <url>
+         <loc>https://entityextractorbatch.dev/api/overview/</loc>
+         <lastmod>2025-06-23</lastmod>
+    </url>
+    <url>
+         <loc>https://entityextractorbatch.dev/architecture/overview/</loc>
+         <lastmod>2025-06-23</lastmod>
+    </url>
+    <url>
+         <loc>https://entityextractorbatch.dev/development/setup/</loc>
+         <lastmod>2025-06-23</lastmod>
+    </url>
+</urlset>

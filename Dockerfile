@@ -15,6 +15,8 @@ RUN apt-get update && apt-get install -y \
 
 # Copy requirements and README first for better caching
 COPY pyproject.toml README.md ./
+# Copy app directory for package building
+COPY app ./app
 RUN pip install --upgrade pip && \
     pip install hatchling && \
     pip install -e .

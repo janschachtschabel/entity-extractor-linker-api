@@ -5,7 +5,7 @@
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A comprehensive entity extraction and knowledge API with Wikipedia linking, educational content generation, and question-answer pair creation. Built with modern Python standards and production-ready architecture.
+A comprehensive entity extraction and knowledge API with Wikipedia linking, educational content generation, and **advanced educational level distribution**. Features support for German educational system standards (Bildungsstufen), Bloom's Taxonomy, and custom educational taxonomies. Built with modern Python standards and production-ready architecture.
 
 ## 🚀 Quick Start
 
@@ -45,14 +45,26 @@ curl http://localhost:8000/health
 
 ## 📋 API Endpoints
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/v1/linker` | POST | Entity extraction and Wikipedia linking |
-| `/api/v1/compendium` | POST | Educational content generation |
-| `/api/v1/qa` | POST | Question-answer pair creation |
-| `/api/v1/pipeline` | POST | **Complete pipeline orchestration** |
-| `/api/v1/utils/synonyms` | POST | Synonym generation utility |
-| `/health` | GET | Health check endpoint |
+| Endpoint | Method | Description | Educational Features |
+|----------|--------|-------------|---------------------|
+| `/api/v1/linker` | POST | Entity extraction and Wikipedia linking | Educational entity generation, multi-perspective coverage |
+| `/api/v1/compendium` | POST | Educational content generation | Structured markdown with citations |
+| `/api/v1/qa` | POST | **Question-answer pair creation** | **🎓 Educational level distribution** |
+| `/api/v1/pipeline` | POST | **Complete pipeline orchestration** | **🚀 Full educational pipeline** |
+| `/api/v1/utils/synonyms` | POST | Synonym generation utility | Educational terminology support |
+| `/health` | GET | Health check endpoint | - |
+
+### 🎓 Educational Level Support
+
+**German Bildungsstufen (Default):**
+- Elementarbereich, Primarstufe, Sekundarstufe I, Sekundarstufe II
+- Hochschule, Berufliche Bildung, Erwachsenenbildung, Förderschule
+
+**Bloom's Taxonomy:**
+- Erinnern, Verstehen, Anwenden, Analysieren, Bewerten, Erschaffen
+
+**Custom Taxonomies:**
+- Support for any user-defined educational categories
 
 **📖 Interactive Documentation**: Visit `/docs` for Swagger UI or `/redoc` for ReDoc
 
@@ -77,10 +89,15 @@ app/
 - ✅ **Rate Limiting**: Built-in request throttling
 - ✅ **Health Checks**: Docker-ready monitoring
 - ✅ **Logging**: Structured logging with Loguru
+- 🎓 **Educational Levels**: German Bildungsstufen & Bloom's Taxonomy
+- 🌍 **Multi-Language**: German and English educational standards
+- 📊 **Even Distribution**: Automatic QA pair distribution across levels
+- 🧠 **Adaptive Complexity**: Level-appropriate content generation
 
 ## 📚 Documentation
 
 - **[API Reference](docs/api/overview.md)** - Detailed endpoint documentation
+- **[Educational Levels Guide](docs/educational_levels_guide.md)** - 🎓 **Educational taxonomies and usage**
 - **[Architecture Overview](docs/architecture/overview.md)** - System design and patterns
 - **[Development Setup](docs/development/setup.md)** - Complete development guide
 - **[Interactive API Docs](http://localhost:8000/docs)** - Swagger UI (when running)

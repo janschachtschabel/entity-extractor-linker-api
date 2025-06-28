@@ -35,6 +35,9 @@ class QAConfig(BaseModel):
 
     num_pairs: int = Field(10, ge=1, le=20)
     max_answer_length: int = Field(250, ge=50, le=1000)
+    # Neue Bildungsstufen-Parameter
+    level_property: str | None = Field(None, description="Name der Bildungsstufen-Eigenschaft (z.B. 'Bildungsstufe')")
+    level_values: list[str] | None = Field(None, description="Liste der Bildungsstufen-Werte (z.B. ['Schule', 'Hochschule', 'Berufsbildung'])")
 
 
 class PipelineConfig(BaseModel):
@@ -64,28 +67,98 @@ class PipelineResponse(BaseModel):
 
 @router.post("/pipeline", response_model=PipelineResponse)
 async def pipeline_endpoint(payload: PipelineRequest) -> PipelineResponse:
-    """Run complete pipeline: Linker → Compendium → QA.
+    """Run complete educational content pipeline: Linker → Compendium → QA with Educational Levels.
 
-    This orchestrator endpoint chains all three main endpoints:
-    1. **Linker**: Extracts/generates entities and links them to Wikipedia
-    2. **Compendium**: Generates educational markdown content from linker output
-    3. **QA**: Creates question-answer pairs from the compendium
+    This orchestrator endpoint chains all three main endpoints with full support for
+    educational level distribution and German/English educational standards:
+
+    1. **Linker**: Extracts/generates entities with educational context
+    2. **Compendium**: Generates comprehensive educational markdown content
+    3. **QA**: Creates question-answer pairs distributed across educational levels
 
     ## Pipeline Flow:
     ```
-    Input Text → Linker → Compendium → QA → Complete Output
+    Input Text → Linker (Educational Entities) → Compendium (Educational Content) → QA (Level-Distributed) → Complete Output
     ```
 
-    ## Configuration:
-    - **Linker**: Entity extraction/generation settings
-    - **Compendium**: Content generation and citation settings
-    - **QA**: Question-answer pair generation settings
+    ## Educational Features:
+    - **Educational Entity Generation**: Comprehensive coverage of educational aspects
+    - **Level-Appropriate Content**: Content adapted to specified educational levels
+    - **QA Level Distribution**: Even distribution across German Bildungsstufen or Bloom's Taxonomy
+    - **Multi-Language Support**: German and English educational standards
 
-    ## Default Settings:
-    - Linker mode: "generate" (creates comprehensive entity coverage)
-    - Educational mode: enabled for both linker and compendium
-    - Citations: enabled in compendium
-    - Language: German (de)
+    ## Configuration Options:
+
+    ### Linker Configuration:
+    - `MODE`: "extract" or "generate" (default: "generate")
+    - `MAX_ENTITIES`: Maximum entities to process (default: 15)
+    - `EDUCATIONAL_MODE`: Enable educational entity generation (default: true)
+    - `ALLOWED_ENTITY_TYPES`: Filter entity types (optional)
+    - `LANGUAGE`: Content language "de" or "en" (default: "de")
+
+    ### Compendium Configuration:
+    - `length`: Target content length in characters (default: 8000)
+    - `enable_citations`: Include Wikipedia citations (default: true)
+    - `educational_mode`: Educational content generation (default: true)
+    - `language`: Content language "de" or "en" (default: "de")
+
+    ### QA Configuration:
+    - `num_pairs`: Number of QA pairs (default: 12)
+    - `max_answer_length`: Maximum answer length (default: 300)
+    - `level_property`: Educational level property name (optional)
+    - `level_values`: List of educational levels (optional)
+
+    ## Educational Level Support:
+
+    ### German Bildungsstufen (Default):
+    - Elementarbereich, Primarstufe, Sekundarstufe I, Sekundarstufe II
+    - Hochschule, Berufliche Bildung, Erwachsenenbildung, Förderschule
+
+    ### Bloom's Taxonomy:
+    - Erinnern, Verstehen, Anwenden, Analysieren, Bewerten, Erschaffen
+
+    ### Custom Taxonomies:
+    - Any custom educational categories can be specified
+
+    ## Response Structure:
+    - `original_text`: Input text
+    - `linker_output`: Complete entity extraction/generation results
+    - `compendium_output`: Educational markdown content with citations
+    - `qa_output`: QA pairs with educational level metadata
+    - `pipeline_statistics`: Processing times and educational level distribution
+
+    ## Example Usage:
+
+    ### Standard Pipeline:
+    ```json
+    {
+      "text": "Einstein und die Relativitätstheorie",
+      "config": {
+        "linker": {"MODE": "generate", "EDUCATIONAL_MODE": true},
+        "compendium": {"length": 8000, "educational_mode": true},
+        "qa": {"num_pairs": 12}
+      }
+    }
+    ```
+
+    ### Educational Levels Pipeline:
+    ```json
+    {
+      "text": "Quantencomputing und KI",
+      "config": {
+        "qa": {
+          "num_pairs": 16,
+          "level_property": "Bildungsstufe",
+          "level_values": ["Sekundarstufe II", "Hochschule", "Berufliche Bildung"]
+        }
+      }
+    }
+    ```
+
+    ## Performance:
+    - Typical processing time: 45-90 seconds for comprehensive content
+    - Automatic timeout handling and error recovery
+    - Detailed processing statistics and educational level distribution metrics
     """
     if not payload.text.strip():
         raise HTTPException(status_code=400, detail="text is required")
@@ -154,6 +227,11 @@ async def pipeline_endpoint(payload: PipelineRequest) -> PipelineResponse:
                 "num_pairs": payload.config.qa.num_pairs,
                 "max_answer_length": payload.config.qa.max_answer_length,
             }
+
+            # Füge Bildungsstufen-Parameter hinzu, falls konfiguriert
+            if payload.config.qa.level_property and payload.config.qa.level_values:
+                qa_request["level_property"] = payload.config.qa.level_property
+                qa_request["level_values"] = payload.config.qa.level_values
 
             qa_response = await client.post("http://localhost:8000/api/v1/qa", json=qa_request, timeout=60.0)
 

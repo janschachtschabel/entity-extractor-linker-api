@@ -10,7 +10,6 @@ import os
 import sys
 
 from fastapi import APIRouter, FastAPI
-from fastapi.responses import JSONResponse
 from loguru import logger
 
 from app.core.settings import settings
@@ -20,12 +19,6 @@ from app.core.settings import settings
 # ---------------------------------------------------------------------------
 
 api_router = APIRouter(prefix="/api")
-
-
-@api_router.get("/health", tags=["system"])
-async def health() -> JSONResponse:
-    """Simple liveness/readiness probe."""
-    return JSONResponse({"status": "ok"})
 
 
 # ---------------------------------------------------------------------------

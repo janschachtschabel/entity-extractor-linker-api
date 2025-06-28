@@ -15,6 +15,7 @@ nav:
   - API Reference:
     - Overview: api/overview.md
     - Endpoints: api/endpoints.md
+    - Educational Levels Guide: educational_levels_guide.md
   - Architecture:
     - Overview: architecture/overview.md
   - Development:

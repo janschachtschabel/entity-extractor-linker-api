@@ -44,9 +44,9 @@ class WikipediaService:
         """Async context manager exit."""
         await self.api_client.__aexit__(exc_type, exc_val, exc_tb)
 
-    async def process_entity_simple(self, entity_name: str, metadata: dict = None) -> dict:
+    async def process_entity_simple(self, entity_name: str, metadata: dict | None = None) -> dict:
         """
-        Simple wrapper for process_entity that accepts just a string.
+        Process entity with simple string input.
 
         Args:
             entity_name: Name of the entity to process

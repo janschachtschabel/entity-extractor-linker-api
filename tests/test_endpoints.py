@@ -18,10 +18,14 @@ client = TestClient(app)
 
 
 def test_health() -> None:
-    """`/api/health` returns JSON {{"status": "ok"}}."""
-    resp = client.get("/api/health")
+    """`/health` returns JSON with status, service, version and timestamp."""
+    resp = client.get("/health")
     assert resp.status_code == 200
-    assert resp.json() == {"status": "ok"}
+    json_resp = resp.json()
+    assert json_resp["status"] == "healthy"
+    assert json_resp["service"] == "entityextractorbatch"
+    assert "version" in json_resp
+    assert "timestamp" in json_resp
 
 
 def test_linker_mock() -> None:

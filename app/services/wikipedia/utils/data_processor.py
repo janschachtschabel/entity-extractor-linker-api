@@ -68,7 +68,7 @@ class WikipediaDataProcessor:
 
         except Exception as e:
             logger.error(f"Error merging page data for {lang}: {e}", exc_info=True)
-            raise WikipediaValidationError(f"Failed to merge page data: {e}")
+            raise WikipediaValidationError(f"Failed to merge page data: {e}") from e
 
     @staticmethod
     def _update_categories(wiki_page: WikiPage, page_data: dict[str, Any]) -> None:
@@ -264,6 +264,7 @@ class WikipediaDataProcessor:
     def finalize_dbpedia_uri(wikipedia_data: dict[str, Any]) -> dict[str, Any]:
         """
         Generate final DBpedia URI using the best available English data.
+
         This should be called at the end of processing after all fallbacks.
 
         Args:

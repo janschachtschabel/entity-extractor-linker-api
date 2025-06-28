@@ -68,18 +68,82 @@ Generate educational content from entity data.
 
 ### `POST /api/v1/qa`
 
-Generate question-answer pairs from markdown content.
+Generate question-answer pairs from text content, with optional educational level distribution.
 
-**Request Body:**
+**Request Body (Standard):**
 ```json
 {
-  "markdown_content": "# Einstein\n\nAlbert Einstein war...",
-  "config": {
-    "num_pairs": 10,
-    "max_answer_length": 200
-  }
+  "text": "# Einstein\n\nAlbert Einstein war ein deutscher theoretischer Physiker...",
+  "num_pairs": 10,
+  "max_answer_length": 200
 }
 ```
+
+**Request Body (Mit Bildungsstufen):**
+```json
+{
+  "text": "# Quantenphysik\n\nDie Quantenphysik beschreibt...",
+  "num_pairs": 12,
+  "max_answer_length": 250,
+  "level_property": "Bildungsstufe",
+  "level_values": [
+    "Primarstufe",
+    "Sekundarstufe I",
+    "Sekundarstufe II", 
+    "Hochschule"
+  ]
+}
+```
+
+**Request Body (Bloomsche Taxonomie):**
+```json
+{
+  "text": "# Photosynthese\n\nDie Photosynthese ist...",
+  "num_pairs": 12,
+  "max_answer_length": 200,
+  "level_property": "Bloom_Taxonomie",
+  "level_values": [
+    "Erinnern",
+    "Verstehen",
+    "Anwenden",
+    "Analysieren"
+  ]
+}
+```
+
+**Response:**
+```json
+{
+  "original_text": "# Quantenphysik...",
+  "qa": [
+    {
+      "question": "Was ist Quantenphysik?",
+      "answer": "Quantenphysik ist ein Bereich der Physik...",
+      "level_property": "Bildungsstufe",
+      "level_value": "Sekundarstufe I"
+    },
+    {
+      "question": "Wie funktioniert die Unschärferelation?",
+      "answer": "Die Heisenbergsche Unschärferelation besagt...",
+      "level_property": "Bildungsstufe",
+      "level_value": "Hochschule"
+    }
+  ]
+}
+```
+
+**Parameter:**
+- `text`: Eingabetext (Markdown unterstützt)
+- `num_pairs`: Anzahl QA-Paare (1-20)
+- `max_answer_length`: Max. Antwortlänge (50-1000 Zeichen)
+- `level_property`: Name der Bildungsstufen-Eigenschaft (optional)
+- `level_values`: Liste der Bildungsstufen-Werte (optional)
+
+**Deutsche Bildungsstufen (Standard):**
+`["Elementarbereich", "Primarstufe", "Sekundarstufe I", "Sekundarstufe II", "Hochschule", "Berufliche Bildung", "Erwachsenenbildung", "Förderschule"]`
+
+**Bloomsche Taxonomie:**
+`["Erinnern", "Verstehen", "Anwenden", "Analysieren", "Bewerten", "Erschaffen"]`
 
 ## Pipeline Endpoint
 
@@ -87,14 +151,57 @@ Generate question-answer pairs from markdown content.
 
 Complete end-to-end processing combining all three endpoints.
 
-**Request Body:**
+**Request Body (Standard):**
 ```json
 {
-  "text": "Input text for processing",
+  "text": "Einstein und die Relativitätstheorie",
   "config": {
-    "linker": { "MODE": "generate", "MAX_ENTITIES": 15 },
-    "compendium": { "length": 8000, "enable_citations": true },
-    "qa": { "num_pairs": 12, "max_answer_length": 300 }
+    "linker": { 
+      "MODE": "generate", 
+      "MAX_ENTITIES": 15,
+      "EDUCATIONAL_MODE": true
+    },
+    "compendium": { 
+      "length": 8000, 
+      "enable_citations": true,
+      "educational_mode": true
+    },
+    "qa": { 
+      "num_pairs": 12, 
+      "max_answer_length": 300 
+    }
+  }
+}
+```
+
+**Request Body (Mit Bildungsstufen):**
+```json
+{
+  "text": "Quantencomputing und künstliche Intelligenz",
+  "config": {
+    "linker": {
+      "MODE": "generate",
+      "MAX_ENTITIES": 20,
+      "EDUCATIONAL_MODE": true,
+      "LANGUAGE": "de"
+    },
+    "compendium": {
+      "length": 10000,
+      "enable_citations": true,
+      "educational_mode": true,
+      "language": "de"
+    },
+    "qa": {
+      "num_pairs": 16,
+      "max_answer_length": 300,
+      "level_property": "Bildungsstufe",
+      "level_values": [
+        "Sekundarstufe II",
+        "Hochschule",
+        "Berufliche Bildung",
+        "Erwachsenenbildung"
+      ]
+    }
   }
 }
 ```
@@ -102,17 +209,45 @@ Complete end-to-end processing combining all three endpoints.
 **Response:**
 ```json
 {
-  "original_text": "Input text",
-  "linker_output": { ... },
-  "compendium_output": { ... },
-  "qa_output": { ... },
+  "original_text": "Quantencomputing und künstliche Intelligenz",
+  "linker_output": {
+    "entities": [...],
+    "metadata": {...}
+  },
+  "compendium_output": {
+    "markdown": "# Quantencomputing und KI\n\n...",
+    "metadata": {...}
+  },
+  "qa_output": {
+    "original_text": "...",
+    "qa": [
+      {
+        "question": "Was ist ein Quantencomputer?",
+        "answer": "Ein Quantencomputer nutzt quantenmechanische...",
+        "level_property": "Bildungsstufe",
+        "level_value": "Sekundarstufe II"
+      },
+      {
+        "question": "Wie funktioniert Quantenverschränkung?",
+        "answer": "Quantenverschränkung beschreibt ein Phänomen...",
+        "level_property": "Bildungsstufe",
+        "level_value": "Hochschule"
+      }
+    ]
+  },
   "pipeline_statistics": {
-    "total_processing_time": 45.2,
+    "total_processing_time": 67.4,
     "steps_completed": 3,
-    "step_times": {
-      "linker": 12.3,
-      "compendium": 28.1,
-      "qa": 4.8
+    "processing_times": {
+      "linker": 18.2,
+      "compendium": 41.7,
+      "qa": 7.5
+    },
+    "educational_levels_distribution": {
+      "Sekundarstufe II": 4,
+      "Hochschule": 4,
+      "Berufliche Bildung": 4,
+      "Erwachsenenbildung": 4
     }
   }
 }

@@ -56,7 +56,7 @@ async def html_extract(title: str, *, lang: str, session) -> str | None:
     except Exception:
         return None
     try:
-        from bs4 import BeautifulSoup  # heavy import – inside function
+        from bs4 import BeautifulSoup  # heavy import - inside function
 
         soup = BeautifulSoup(html, "html.parser")
         para = soup.select_one("div.mw-parser-output > p")

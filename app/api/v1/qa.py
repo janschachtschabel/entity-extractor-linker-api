@@ -13,8 +13,12 @@ class QARequest(BaseModel):
     num_pairs: int = Field(10, ge=1, le=20)
     max_answer_length: int = Field(250, ge=50, le=1000)
     # Neue Bildungsstufen-Konfiguration
-    level_property: str | None = Field(None, description="Name der Bildungsstufen-Eigenschaft (z.B. 'Bildungsstufe')")
-    level_values: list[str] | None = Field(None, description="Liste der Bildungsstufen-Werte (z.B. ['Schule', 'Hochschule', 'Berufsbildung'])")
+    level_property: str | None = Field(
+        None, description="Name der Bildungsstufen-Eigenschaft (z.B. 'Bildungsstufe')"
+    )
+    level_values: list[str] | None = Field(
+        None, description="Liste der Bildungsstufen-Werte (z.B. ['Schule', 'Hochschule', 'Berufsbildung'])"
+    )
 
 
 class QAPair(BaseModel):

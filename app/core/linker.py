@@ -11,7 +11,7 @@ from app.services.wikipedia.service import WikipediaService
 
 async def process_text_async(
     text: str,
-    mode: Literal["extract", "generate", "infer"] = "extract",
+    mode: Literal["extract", "generate"] = "extract",
     max_entities: int = 10,
     language: Literal["de", "en"] = "de",
     educational_mode: bool = False,
@@ -22,7 +22,7 @@ async def process_text_async(
 
     Args:
         text: Input text to process
-        mode: Processing mode (extract, generate, infer)
+        mode: Processing mode (extract, generate)
         max_entities: Maximum number of entities to extract
         language: Target language for Wikipedia data
         educational_mode: Enable educational perspective (only for generate mode)
@@ -32,7 +32,8 @@ async def process_text_async(
         Tuple of (entities list, statistics dict)
     """
     logger.info(
-        f"Processing text with mode='{mode}', max_entities={max_entities}, language='{language}', educational_mode={educational_mode}"
+        f"Processing text with mode='{mode}', max_entities={max_entities}, "
+        f"language='{language}', educational_mode={educational_mode}"
     )
 
     entities = []
@@ -117,9 +118,6 @@ async def _extract_or_generate_entities(
             educational_mode=educational_mode,
             allowed_entity_types=allowed_entity_types,
         )
-    elif mode == "infer":
-        # For now, use extract mode for infer
-        raw_entities = extract_entities(text, max_entities=max_entities, allowed_entity_types=allowed_entity_types)
     else:
         raise ValueError(f"Unknown mode: {mode}")
 
@@ -224,7 +222,7 @@ def _fallback_entity_extraction(text: str, max_entities: int) -> list[EntityProc
 
 def process_text(
     text: str,
-    mode: Literal["extract", "generate", "infer"] = "extract",
+    mode: Literal["extract", "generate"] = "extract",
     max_entities: int = 10,
     language: Literal["de", "en"] = "de",
     educational_mode: bool = False,

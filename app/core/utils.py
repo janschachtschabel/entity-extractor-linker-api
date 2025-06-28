@@ -10,6 +10,10 @@ import re
 
 from loguru import logger
 
+# Import functions that will be used later
+from .openai_wrapper import generate_synonyms_llm as _synonyms_llm
+from .openai_wrapper import translate_text as _translate_text
+
 # Logging via loguru (see plan.md for style)
 
 
@@ -134,9 +138,6 @@ _simple_synonyms = {
 }
 
 
-from .openai_wrapper import generate_synonyms_llm as _synonyms_llm
-
-
 def generate_synonyms(word: str, max_synonyms: int = 5, *, lang: str = "de") -> list[str]:
     """Return synonyms via OpenAI – fallback to local dict."""
     logger.info(f"[generate_synonyms] Called with word='{word}', max_synonyms={max_synonyms}, lang='{lang}'")
@@ -152,10 +153,8 @@ def generate_synonyms(word: str, max_synonyms: int = 5, *, lang: str = "de") -> 
     return fallback_syns
 
 
-from .openai_wrapper import translate_text as _translate_text
-
-
-def translate(text: str, target_lang: str = "en", source_lang: str = None) -> str:
+def translate(text: str, target_lang: str = "en", source_lang: str | None = None) -> str:
+    """Translate text using OpenAI API."""
     logger.info(f"[translate] Called with target_lang='{target_lang}', source_lang='{source_lang}'")
     logger.debug(f"[translate] Input text length: {len(text) if text else 0}")
     """Translate *text* to *target_lang* via OpenAI.

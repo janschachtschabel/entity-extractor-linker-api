@@ -7,8 +7,9 @@ from typing import Any
 @dataclass
 class EntityProcessingContext:
     """
-    Context object for entity processing that holds intermediate data during
-    different processing stages (Wikipedia, Wikidata, etc.).
+    Context object for entity processing that holds intermediate data during different processing stages.
+
+    This includes Wikipedia, Wikidata, etc.
 
     This is used internally during the pipeline and converted to Entity at the end.
     """

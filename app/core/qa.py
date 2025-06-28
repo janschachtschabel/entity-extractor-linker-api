@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 def generate_qa_pairs(
-    markdown: str, num_pairs: int = 5, topic: str = None, max_chars: int = None
+    markdown: str, num_pairs: int = 5, topic: str | None = None, max_chars: int | None = None
 ) -> list[tuple[str, str]]:
     """Return list of (question, answer) tuples.
 
@@ -70,13 +70,13 @@ def generate_qa_pairs(
     except Exception as exc:  # pylint: disable=broad-except
         logger.error(f"[generate_qa_pairs] OpenAI QA generation failed: {type(exc).__name__}: {exc}")
         # Re-raise the exception instead of using fallback
-        if isinstance(exc, (RuntimeError, ValueError)):
+        if isinstance(exc, RuntimeError | ValueError):
             raise
         else:
             raise RuntimeError(f"QA generation failed: {exc}") from exc
 
 
-def _call_openai_generate(prompt: str, num_pairs: int, max_chars: int = None) -> list[tuple[str, str]]:
+def _call_openai_generate(prompt: str, num_pairs: int, max_chars: int | None = None) -> list[tuple[str, str]]:
     """Direct OpenAI chat call wrapped for QA generation."""
     from . import openai_wrapper  # reuse ensure_ready & openai import
 
@@ -138,10 +138,10 @@ def _call_openai_generate(prompt: str, num_pairs: int, max_chars: int = None) ->
 def generate_qa_pairs_with_levels(
     markdown: str,
     num_pairs: int = 5,
-    topic: str = None,
-    max_chars: int = None,
+    topic: str | None = None,
+    max_chars: int | None = None,
     level_property: str = "Bildungsstufe",
-    level_values: list[str] = None
+    level_values: list[str] | None = None
 ) -> list[tuple[str, str, str, str]]:
     """Return list of (question, answer, level_property, level_value) tuples.
 
@@ -214,7 +214,7 @@ def generate_qa_pairs_with_levels(
 
     except Exception as exc:
         logger.error(f"[generate_qa_pairs_with_levels] OpenAI QA generation failed: {type(exc).__name__}: {exc}")
-        if isinstance(exc, (RuntimeError, ValueError)):
+        if isinstance(exc, RuntimeError | ValueError):
             raise
         else:
             raise RuntimeError(f"Educational levels QA generation failed: {exc}") from exc
@@ -234,7 +234,7 @@ def _distribute_pairs_across_levels(num_pairs: int, level_values: list[str]) -> 
 
 def _create_educational_levels_prompt(
     markdown: str, num_pairs: int, level_property: str, level_values: list[str],
-    pairs_per_level: dict[str, int], topic: str = None, max_chars: int = None
+    pairs_per_level: dict[str, int], topic: str | None = None, max_chars: int | None = None
 ) -> str:
     """Create enhanced prompt for educational levels QA generation."""
     prompt = (
@@ -306,7 +306,7 @@ def _create_educational_levels_prompt(
 
 def _call_openai_generate_with_levels(
     prompt: str, num_pairs: int, level_property: str,
-    level_values: list[str], max_chars: int = None
+    level_values: list[str], max_chars: int | None = None
 ) -> list[tuple[str, str, str, str]]:
     """OpenAI call for educational levels QA generation."""
     from . import openai_wrapper
@@ -342,7 +342,7 @@ def _call_openai_generate_with_levels(
                 parts = line.split(";", 2)  # Maximal 3 Teile
                 if len(parts) >= 3:
                     q, a, level = parts[0].strip(), parts[1].strip(), parts[2].strip()
-                    
+
                     # Entferne Nummerierungen aus Fragen (z.B. "1. ", "2) ", "a) ")
                     q = re.sub(r'^\d+[.)\s]+', '', q).strip()
                     q = re.sub(r'^[a-zA-Z][.)\s]+', '', q).strip()

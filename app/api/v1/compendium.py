@@ -35,7 +35,10 @@ class CompendiumRequest(BaseModel):
     text: str | None = Field(None, description="Raw text input (required if input_type=text)")
     linker_data: dict | None = Field(
         None,
-        description="Complete JSON response from /linker endpoint - copy the entire response here when using input_type='linker_output'",
+        description=(
+            "Complete JSON response from /linker endpoint - "
+            "copy the entire response here when using input_type='linker_output'"
+        ),
     )
     config: CompendiumConfig = Field(default_factory=CompendiumConfig, description="Compendium configuration")
 

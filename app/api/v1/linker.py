@@ -13,7 +13,7 @@ router = APIRouter(prefix="/v1", tags=["linker"])
 
 
 class LinkerConfig(BaseModel):
-    MODE: Literal["extract", "generate", "infer"] = Field(..., example="extract")
+    MODE: Literal["extract", "generate"] = Field(..., example="extract")
     MAX_ENTITIES: int = Field(10, ge=1, le=100)
     ALLOWED_ENTITY_TYPES: str | list[str] | Literal["auto"] = "auto"
     EDUCATIONAL_MODE: bool = False
@@ -45,7 +45,6 @@ class Entity(BaseModel):
 
 class EntityDetails(BaseModel):
     typ: str
-    inferred: str = "explicit"
     citation: str
 
 
@@ -93,11 +92,6 @@ class Statistics(BaseModel):
             "wikidata_part_of": {},
             "wikidata_has_part": {},
             "predicates": {},
-            "relationship_inference": {
-                "explicit": {"count": 0, "percent": 0.0},
-                "implicit": {"count": 0, "percent": 0.0},
-            },
-            "entity_inference": {"explicit": {"count": 0, "percent": 0.0}},
         }
     )
     types_distribution: dict = Field(default_factory=dict)
@@ -131,9 +125,6 @@ async def linker_endpoint(payload: LinkerRequest) -> LinkerResponse:
     - Generates related entities that help understand the topic, even if not explicitly mentioned
     - Creates a comprehensive knowledge map around the input topic
     - Ideal for educational content creation and topic exploration
-
-    **Infer Mode** (`MODE: "infer"`):
-    - Currently uses extract mode logic (placeholder for future inference capabilities)
 
     ## Configuration Options:
 
@@ -238,7 +229,6 @@ async def linker_endpoint(payload: LinkerRequest) -> LinkerResponse:
             # Create EntityDetails
             details = EntityDetails(
                 typ=entity.type,
-                inferred="explicit",  # Default assumption
                 citation=entity.label,
             )
 
@@ -300,7 +290,6 @@ async def linker_endpoint(payload: LinkerRequest) -> LinkerResponse:
             top10={
                 "wikipedia_categories": dict(wiki_categories_counter.most_common(10)),
                 "wikipedia_internal_links": dict(wiki_internal_links_counter.most_common(10)),
-                "entity_inference": {"explicit": {"count": total_entities, "percent": 100.0}},
             },
             types_distribution=dict(types_distribution),
             linked={

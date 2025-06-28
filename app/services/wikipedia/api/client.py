@@ -205,7 +205,9 @@ class WikipediaAPIClient:
             except Exception as e:
                 self._update_stats(success=False)
                 last_exception = e
-                logger.error("Unexpected error (attempt %d/%d): %s", attempt + 1, max_retries + 1, str(e), exc_info=True)
+                logger.error(
+                    "Unexpected error (attempt %d/%d): %s", attempt + 1, max_retries + 1, str(e), exc_info=True
+                )
 
         # If we get here, all retries failed
         if isinstance(last_exception, asyncio.TimeoutError):
@@ -248,7 +250,7 @@ class WikipediaAPIClient:
             logger.error(
                 "Wikipedia API 'pages' is not a dict even after conversion: {pages!r}. Raw 'pages' (truncated): {raw}",
                 pages=pages,
-                raw=json.dumps(pages)[:2000] if isinstance(pages, (dict, list)) else str(pages)[:2000],
+                raw=json.dumps(pages)[:2000] if isinstance(pages, dict | list) else str(pages)[:2000],
             )
             return {}, redirects_map
 

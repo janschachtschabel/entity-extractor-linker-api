@@ -14,7 +14,7 @@ router = APIRouter(prefix="/v1", tags=["pipeline"])
 class LinkerConfig(BaseModel):
     """Configuration for the linker step."""
 
-    MODE: Literal["extract", "generate", "infer"] = "generate"
+    MODE: Literal["extract", "generate"] = "generate"
     MAX_ENTITIES: int = Field(10, ge=1, le=100)
     ALLOWED_ENTITY_TYPES: str | list[str] | Literal["auto"] = "auto"
     EDUCATIONAL_MODE: bool = False
@@ -36,8 +36,12 @@ class QAConfig(BaseModel):
     num_pairs: int = Field(10, ge=1, le=20)
     max_answer_length: int = Field(250, ge=50, le=1000)
     # Neue Bildungsstufen-Parameter
-    level_property: str | None = Field(None, description="Name der Bildungsstufen-Eigenschaft (z.B. 'Bildungsstufe')")
-    level_values: list[str] | None = Field(None, description="Liste der Bildungsstufen-Werte (z.B. ['Schule', 'Hochschule', 'Berufsbildung'])")
+    level_property: str | None = Field(
+        None, description="Name der Bildungsstufen-Eigenschaft (z.B. 'Bildungsstufe')"
+    )
+    level_values: list[str] | None = Field(
+        None, description="Liste der Bildungsstufen-Werte (z.B. ['Schule', 'Hochschule', 'Berufsbildung'])"
+    )
 
 
 class PipelineConfig(BaseModel):
@@ -74,7 +78,8 @@ async def pipeline_endpoint(payload: PipelineRequest) -> PipelineResponse:
 
     1. **Linker**: Extracts/generates entities with educational context
     2. **Compendium**: Generates comprehensive educational markdown content
-    3. **QA**: Creates question-answer pairs distributed across educational levels
+    3. **QA**: Creates question-answer pairs distributed across
+       educational levels
 
     ## Pipeline Flow:
     ```

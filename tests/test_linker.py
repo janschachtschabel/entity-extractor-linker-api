@@ -6,7 +6,7 @@ from app.core.linker import process_text
 from app.models.entity import Entity
 
 
-@pytest.mark.parametrize("mode", ["extract", "generate", "infer"])
+@pytest.mark.parametrize("mode", ["extract", "generate"])
 def test_process_text_modes(mode):
     """Test different processing modes with mocked OpenAI and Wikipedia."""
     text = "Die Zugspitze ist ein Berg in Deutschland."

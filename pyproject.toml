@@ -55,6 +55,16 @@ Documentation = "https://janschachtschabel.github.io/entity-extractor-linker-api
 Repository = "https://github.com/janschachtschabel/entity-extractor-linker-api"
 Issues = "https://github.com/janschachtschabel/entity-extractor-linker-api/issues"
 
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "app/",
+    "README.md",
+    "pyproject.toml"
+]
+
 [tool.ruff]
 line-length = 120
 target-version = "py313"

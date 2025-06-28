@@ -13,8 +13,8 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
-COPY pyproject.toml ./
+# Copy requirements and README first for better caching
+COPY pyproject.toml README.md ./
 RUN pip install --upgrade pip && \
     pip install hatchling && \
     pip install -e .

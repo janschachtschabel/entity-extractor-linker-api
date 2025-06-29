@@ -1,13 +1,62 @@
-# Entity Extraction Batch API
+# Entity Extractor & Linker API
 
 [![CI/CD Pipeline](https://github.com/janschachtschabel/entity-extractor-linker-api/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/janschachtschabel/entity-extractor-linker-api/actions)
 [![Code Quality](https://img.shields.io/badge/code%20quality-A+-green.svg)](https://github.com/janschachtschabel/entity-extractor-linker-api)
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-A comprehensive entity extraction and knowledge API with Wikipedia linking, educational content generation, and **advanced educational level distribution**. Features support for German educational system standards (Bildungsstufen), Bloom's Taxonomy, and custom educational taxonomies. Built with modern Python standards and production-ready architecture.
+Eine hochperformante **FastAPI-basierte REST-API** zur intelligenten Extraktion, Verknüpfung und Analyse von Named Entities in beliebigen Texten. Die API nutzt moderne LLM-Technologie (OpenAI kompatibel) kombiniert mit Wikipedia für umfassende Textanalyse und Content-Generierung.
 
-## 🚀 Quick Start
+## 🎯 Kernfunktionen
+
+### 📊 Entity Processing
+- **Extraktion**: Automatische Erkennung von Personen, Orten, Organisationen, Ereignissen und Konzepten
+- **Linking**: Verknüpfung mit Wikipedia für strukturierte Metadaten
+- **Kategorisierung**: Intelligente Klassifizierung nach Entity-Typen
+- **Mehrsprachigkeit**: Unterstützung für Deutsch und Englisch
+- **Education Mode**: Multi-perspektivische Analyse von Themen aus verschiedenen Gesichtspunkten
+
+### 📚 Kompendium-Generierung
+- **Automatische Texterstellung**: Zusammenfassende Texte mit Wikipedia-Referenzen
+- **Education Mode**: Multi-perspektivische Betrachtung von Themen aus verschiedenen Blickwinkeln
+- **Strukturierte Ausgabe**: Formatierte Texte mit oder ohne Quellenangaben
+- **Anpassbare Länge**: Konfigurierbare Textumfänge je nach Anforderung
+
+### 🎓 QA-Paar-Generierung
+- **Intelligente Fragenerstellung**: Automatische Generierung relevanter Fragen zu Textinhalten
+- **Kontextbasierte Antworten**: Präzise Antworten basierend auf extrahierten Entities
+- **Normierung von QA-Paaren**: Können nach auf verschiedene Werte normiert werden wie z.B. Bildungsstufen oder Lernzielniveaus (Bloomsche Taxonomie)
+
+## 🚀 API-Endpoints
+
+```
+# Entity Processing
+POST /api/extract          # Entity-Extraktion und Wikipedia-Linking
+
+# Content Generation
+POST /api/create-compendium # Kompendium-Erstellung
+POST /api/generate-qa      # QA-Paar-Generierung
+
+# Pipeline Processing
+POST /api/pipeline         # Vollständige Verarbeitungs-Pipeline
+
+# Utilities
+GET  /api/utils           # Hilfsfunktionen und Tools
+
+# System
+GET  /health              # Service-Status
+GET  /docs                # Interactive API-Dokumentation (Swagger UI)
+GET  /redoc               # Alternative API-Dokumentation (ReDoc)
+```
+
+## ⚡ Performance & Skalierung
+
+- **Asynchrone Verarbeitung**: Concurrent API-Calls für optimale Performance
+- **Rate Limiting**: Schutz vor API-Überlastung
+- **Batch Processing**: Effiziente Verarbeitung großer Textmengen
+- **Strukturiertes Logging**: Umfassendes Monitoring mit Loguru
+
+## � Quick Start
 
 ### Prerequisites
 
@@ -43,147 +92,17 @@ docker run -p 8000:8000 -e OPENAI_API_KEY="your-key" entityextractorbatch
 curl http://localhost:8000/health
 ```
 
-## 📋 API Endpoints
+## 🧪 Live Demo
 
-| Endpoint | Method | Description | Educational Features |
-|----------|--------|-------------|---------------------|
-| `/api/v1/linker` | POST | Entity extraction and Wikipedia linking | Educational entity generation, multi-perspective coverage |
-| `/api/v1/compendium` | POST | Educational content generation | Structured markdown with citations |
-| `/api/v1/qa` | POST | **Question-answer pair creation** | **🎓 Educational level distribution** |
-| `/api/v1/pipeline` | POST | **Complete pipeline orchestration** | **🚀 Full educational pipeline** |
-| `/api/v1/utils/synonyms` | POST | Synonym generation utility | Educational terminology support |
-| `/health` | GET | Health check endpoint | - |
+**🚀 Try it now in Google Colab** (no installation required):
 
-### 🎓 Educational Level Support
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1jKr9i6e2oA3TS-KwxFKrEEnUQo2Wxltd#scrollTo=hNDE-36iJmju)
 
-**German Bildungsstufen (Default):**
-- Elementarbereich, Primarstufe, Sekundarstufe I, Sekundarstufe II
-- Hochschule, Berufliche Bildung, Erwachsenenbildung, Förderschule
-
-**Bloom's Taxonomy:**
-- Erinnern, Verstehen, Anwenden, Analysieren, Bewerten, Erschaffen
-
-**Custom Taxonomies:**
-- Support for any user-defined educational categories
-
-**📖 Interactive Documentation**: Visit `/docs` for Swagger UI or `/redoc` for ReDoc
-
-## 🏗️ Architecture
-
-Modern, modular architecture with clear separation of concerns:
-
-```
-app/
-├── api/v1/              # API endpoints (FastAPI routers)
-├── core/                # Business logic and utilities
-├── models/              # Pydantic data models
-├── services/            # External service integrations
-│   └── wikipedia/       # Wikipedia API service
-└── main.py              # Application factory
-```
-
-**Key Features:**
-- ✅ **Async/Await**: Non-blocking I/O operations
-- ✅ **Type Safety**: Full MyPy type checking
-- ✅ **Error Handling**: Custom exception hierarchy
-- ✅ **Rate Limiting**: Built-in request throttling
-- ✅ **Health Checks**: Docker-ready monitoring
-- ✅ **Logging**: Structured logging with Loguru
-- 🎓 **Educational Levels**: German Bildungsstufen & Bloom's Taxonomy
-- 🌍 **Multi-Language**: German and English educational standards
-- 📊 **Even Distribution**: Automatic QA pair distribution across levels
-- 🧠 **Adaptive Complexity**: Level-appropriate content generation
-
-## 📚 Documentation
-
-- **[API Reference](docs/api/overview.md)** - Detailed endpoint documentation
-- **[Educational Levels Guide](docs/educational_levels_guide.md)** - 🎓 **Educational taxonomies and usage**
-- **[Architecture Overview](docs/architecture/overview.md)** - System design and patterns
-- **[Development Setup](docs/development/setup.md)** - Complete development guide
-- **[Interactive API Docs](http://localhost:8000/docs)** - Swagger UI (when running)
-
-## 🔧 Development
-
-### Setup Development Environment
-
-```bash
-# Create virtual environment
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-
-# Install with development dependencies
-pip install -e ".[dev]"
-
-# Set up pre-commit hooks
-pre-commit install
-```
-
-### Code Quality Standards
-
-```bash
-# Linting and formatting
-ruff check app/ --fix
-ruff format app/
-
-# Type checking
-mypy app/
-
-# Run tests with coverage
-pytest --cov=app --cov-report=html
-```
-
-### Quality Assurance
-
-- **Ruff**: Linting and formatting with 120-character line limit
-- **MyPy**: Strict type checking enabled
-- **Pre-commit**: Automated quality checks on commit
-- **Pytest**: Comprehensive test suite with 15+ tests
-- **GitHub Actions**: CI/CD pipeline with quality gates
-
-## 🐳 Production Deployment
-
-### Docker Production Setup
-
-```bash
-# Multi-stage production build
-docker build -t entityextractorbatch:prod .
-
-# Run with production settings
-docker run -d \
-  --name entityextractor-prod \
-  -p 8000:8000 \
-  -e OPENAI_API_KEY="your-production-key" \
-  -e LOG_LEVEL="WARNING" \
-  --restart unless-stopped \
-  entityextractorbatch:prod
-```
-
-### Environment Variables
-
-| Variable | Purpose | Default |
-|----------|---------|---------|
-| `OPENAI_API_KEY` | Required for LLM functionality | *(required)* |
-| `OPENAI_TIMEOUT` | Request timeout for OpenAI API | `60.0` |
-| `LOG_LEVEL` | Logging level (DEBUG/INFO/WARNING/ERROR) | `INFO` |
-| `RATE_LIMIT_REQUESTS` | Requests per minute per IP | `100` |
-| `RATE_WINDOW` | Rate limiting window in seconds | `60` |
-
-## 🧪 Testing
-
-```bash
-# Run all tests
-pytest
-
-# Run with coverage report
-pytest --cov=app --cov-report=html
-
-# Run specific test categories
-pytest tests/test_endpoints.py  # API tests
-pytest tests/test_linker.py     # Entity linking tests
-pytest tests/test_pipeline.py  # Pipeline orchestration tests
-```
-
-**Test Coverage**: 15+ comprehensive tests covering all major functionality
+Das Notebook enthält:
+- Vollständige API-Installation in Google Colab
+- Cloudflare Tunnel für öffentlichen Zugriff
+- Interaktive Beispiele für alle Endpoints
+- Schritt-für-Schritt Anleitung
 
 ## 📈 Performance
 
@@ -226,7 +145,9 @@ We welcome contributions! Please see our [Development Guide](docs/development/se
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
+
+## Test
 
 ## 🆘 Support
 

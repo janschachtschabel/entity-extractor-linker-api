@@ -1,6 +1,7 @@
 fastapi>=0.111.0
 uvicorn[standard]>=0.29.0
 pydantic>=2.7.3
+pydantic-settings>=2.0.0
 loguru>=0.7.2
 aiohttp>=3.9
 httpx>=0.25.0

@@ -31,11 +31,11 @@ Eine hochperformante **FastAPI-basierte REST-API** zur intelligenten Extraktion,
 
 ```
 # Entity Processing
-POST /api/extract          # Entity-Extraktion und Wikipedia-Linking
+POST /api/linker           # Entity-Extraktion und Wikipedia-Linking
 
 # Content Generation
-POST /api/create-compendium # Kompendium-Erstellung
-POST /api/generate-qa      # QA-Paar-Generierung
+POST /api/compendium       # Kompendium-Erstellung
+POST /api/qa               # QA-Paar-Generierung
 
 # Pipeline Processing
 POST /api/pipeline         # Vollständige Verarbeitungs-Pipeline
@@ -101,8 +101,6 @@ curl http://localhost:8000/health
 Das Notebook enthält:
 - Vollständige API-Installation in Google Colab
 - Cloudflare Tunnel für öffentlichen Zugriff
-- Interaktive Beispiele für alle Endpoints
-- Schritt-für-Schritt Anleitung
 
 ## 📈 Performance
 
